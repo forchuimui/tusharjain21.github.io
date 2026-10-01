@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>October — I Fell in Love With You ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #090707;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    overflow: hidden;
+}
+
+/* Main reel */
+.reel {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-width: 500px;
+    margin: auto;
+    overflow: hidden;
+    background: #1b0d0b;
+}
+
+/* Photos */
+.slides {
+    position: absolute;
+    inset: 0;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+        opacity 1.2s ease,
+        transform 6s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dark cinematic overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.45),
+            transparent 30%,
+            transparent 55%,
+            rgba(0,0,0,.75)
+        );
+    z-index: 2;
+}
+
+/* Top text */
+.top {
+    position: absolute;
+    top: 40px;
+    left: 25px;
+    right: 25px;
+    z-index: 5;
+    text-align: center;
+}
+
+.october {
+    font-size: 14px;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    color: #ffd8bd;
+}
+
+.title {
+    margin-top: 12px;
+    font-size: 31px;
+    font-weight: normal;
+    text-shadow: 0 3px 15px black;
+}
+
+/* Bottom message */
+.bottom {
+    position: absolute;
+    bottom: 70px;
+    left: 25px;
+    right: 25px;
+    z-index: 5;
+    text-align: center;
+}
+
+.message {
+    font-size: 22px;
+    line-height: 1.5;
+    text-shadow: 0 3px 15px black;
+}
+
+.sub {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #ffe6d7;
+}
+
+/* Music button */
+.music-btn {
+    position: absolute;
+    top: 28px;
+    right: 20px;
+    z-index: 10;
+
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.5);
+
+    background: rgba(0,0,0,.4);
+    color: white;
+    font-size: 20px;
+
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+}
+
+/* Progress bars */
+.progress {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+
+.bar {
+    height: 3px;
+    flex: 1;
+    border-radius: 5px;
+    background: rgba(255,255,255,.35);
+    overflow: hidden;
+}
+
+.bar span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: white;
+}
+
+.bar.done span {
+    width: 100%;
+}
+
+.bar.current span {
+    animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+/* Hearts */
+.heart {
+    position: absolute;
+    bottom: -30px;
+    z-index: 4;
+    font-size: 18px;
+    opacity: .8;
+    animation: floatHeart linear forwards;
+    pointer-events: none;
+}
+
+@keyframes floatHeart {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: .8;
+    }
+
+    100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Falling leaves */
+.leaf {
+    position: absolute;
+    top: -30px;
+    z-index: 3;
+    pointer-events: none;
+    opacity: .8;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-40px) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+/* Final screen */
+.final {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    text-align: center;
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #4a2119,
+            #140908 70%
+        );
+
+    opacity: 0;
+    visibility: hidden;
+    transition: 1.5s ease;
+}
+
+.final.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.final .big-heart {
+    font-size: 65px;
+    animation: heartbeat 1.3s infinite;
+}
+
+@keyframes heartbeat {
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.18);
+    }
+}
+
+.final h1 {
+    margin-top: 20px;
+    font-size: 35px;
+    font-weight: normal;
+}
+
+.final p {
+    margin-top: 18px;
+    max-width: 380px;
+    font-size: 19px;
+    line-height: 1.7;
+    color: #ffe4d5;
+}
+
+.signature {
+    margin-top: 25px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffc4a5;
+}
+
+/* Replay button */
+.replay {
+    margin-top: 30px;
+    padding: 12px 25px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 30px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+    .title {
+        font-size: 27px;
+    }
+
+    .message {
+        font-size: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="reel">
+
+    <!-- MUSIC -->
+    <audio id="music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Progress -->
+    <div class="progress" id="progress"></div>
+
+    <!-- Music button -->
+    <button class="music-btn" id="musicBtn">♫</button>
+
+    <!-- Photos -->
+    <div class="slides">
+
+        <div class="slide active">
+            <img src="photo1.jpg" alt="Our memory 1">
+        </div>
+
+        <div class="slide">
+            <img src="photo2.jpg" alt="Our memory 2">
+        </div>
+
+        <div class="slide">
+            <img src="photo3.jpg" alt="Our memory 3">
+        </div>
+
+        <div class="slide">
+            <img src="photo4.jpg" alt="Our memory 4">
+        </div>
+
+        <div class="slide">
+            <img src="photo5.jpg" alt="Our memory 5">
+        </div>
+
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Top -->
+    <div class="top">
+        <div class="october">October</div>
+        <div class="title">The month I fell for you ❤️</div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="bottom">
+
+        <div class="message" id="message">
+            Some memories become moments...
+        </div>
+
+        <div class="sub">
+            5 moments • one beautiful story
+        </div>
+
+    </div>
+
+    <!-- Final message -->
+    <div class="final" id="final">
+
+        <div class="big-heart">❤️</div>
+
+        <h1>Happy October, My Love</h1>
+
+        <p>
+            If I could choose one person to fall in love with
+            over and over again...
+            <br><br>
+            I would choose you.
+            <br><br>
+            October may have given me the season,
+            but you gave me something I'll never forget.
+        </p>
+
+        <div class="signature">
+            Forever yours ❤️
+        </div>
+
+        <button class="replay" onclick="replayReel()">
+            ↻ Watch Again
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const slides = document.querySelectorAll(".slide");
+const message = document.getElementById("message");
+const progress = document.getElementById("progress");
+const final = document.getElementById("final");
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+
+let current = 0;
+let timer;
+
+const messages = [
+    "Some memories become moments...",
+    "Some moments become memories...",
+    "And somehow, you became my favorite one. ❤️",
+    "Every picture reminds me how lucky I am.",
+    "If October means falling in love...",
+    "Then I'd fall for you all over again."
+];
+
+/* Create progress bars */
+slides.forEach((_, i) => {
+    const bar = document.createElement("div");
+    bar.className = "bar";
+
+    const span = document.createElement("span");
+    bar.appendChild(span);
+
+    progress.appendChild(bar);
+});
+
+const bars = document.querySelectorAll(".bar");
+
+/* Show slide */
+function showSlide(index) {
+
+    slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+    });
+
+    bars.forEach((bar, i) => {
+        bar.classList.remove("done", "current");
+
+        if (i < index) {
+            bar.classList.add("done");
+        }
+
+        if (i === index) {
+            bar.classList.add("current");
+        }
+    });
+
+    message.style.opacity = "0";
+
+    setTimeout(() => {
+        message.textContent = messages[index];
+        message.style.opacity = "1";
+    }, 300);
+}
+
+/* Next slide */
+function nextSlide() {
+
+    current++;
+
+    if (current >= slides.length) {
+        clearInterval(timer);
+
+        setTimeout(() => {
+            final.classList.add("show");
+        }, 800);
+
+        return;
+    }
+
+    showSlide(current);
+}
+
+/* Start slideshow */
+function startReel() {
+
+    showSlide(0);
+
+    timer = setInterval(nextSlide, 5000);
+
+}
+
+/* Music */
+musicBtn.addEventListener("click", () => {
+
+    if (music.paused) {
+        music.play();
+        musicBtn.textContent = "❚❚";
+    } else {
+        music.pause();
+        musicBtn.textContent = "♫";
+    }
+
+});
+
+/* Try music after first interaction */
+document.addEventListener("click", () => {
+
+    if (music.paused) {
+        music.play()
+            .then(() => {
+                musicBtn.textContent = "❚❚";
+            })
+            .catch(() => {});
+    }
+
+}, { once: true });
+
+
+/* Floating hearts */
+function createHeart() {
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.textContent = Math.random() > .5 ? "❤️" : "🤍";
+
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize =
+        (12 + Math.random() * 18) + "px";
+
+    heart.style.animationDuration =
+        (5 + Math.random() * 5) + "s";
+
+    document.querySelector(".reel").appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 10000);
+}
+
+setInterval(createHeart, 700);
+
+
+/* Falling autumn leaves */
+function createLeaf() {
+
+    const leaf = document.createElement("div");
+
+    leaf.className = "leaf";
+    leaf.textContent = Math.random() > .5 ? "🍂" : "🍁";
+
+    leaf.style.left = Math.random() * 100 + "%";
+    leaf.style.fontSize =
+        (12 + Math.random() * 15) + "px";
+
+    leaf.style.animationDuration =
+        (5 + Math.random() * 6) + "s";
+
+    document.querySelector(".reel").appendChild(leaf);
+
+    setTimeout(() => {
+        leaf.remove();
+    }, 12000);
+}
+
+setInterval(createLeaf, 900);
+
+
+/* Replay */
+function replayReel() {
+
+    final.classList.remove("show");
+
+    current = 0;
+
+    clearInterval(timer);
+
+    music.currentTime = 0;
+    music.play()
+        .then(() => {
+            musicBtn.textContent = "❚❚";
+        })
+        .catch(() => {});
+
+    startReel();
+}
+
+
+/* Start */
+startReel();
+
+</script>
+
+</body>
+</html>
